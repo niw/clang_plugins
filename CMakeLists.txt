@@ -37,3 +37,7 @@ function(add_clang_format_custom_target target)
     add_dependencies(${target} ${target}_clang_format)
 endfunction(add_clang_format_custom_target)
 
+# Disable `llvm_check_source_file_list` which requires all source files
+# should be in a target of the `CMakeLists.txt` next to these files.
+function(llvm_check_source_file_list)
+endfunction(llvm_check_source_file_list)
