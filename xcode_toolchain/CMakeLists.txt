@@ -33,6 +33,9 @@ set(XCODE_TOOLCHAIN_BUNDLE_COMPATIBILITY_VERSION 2)
 set(XCODE_TOOLCHAIN_BUNDLE_COMPATIBILITY_VERSION_DISPLAY_STRING "Xcode 8.0")
 string(TIMESTAMP XCODE_TOOLCHAIN_BUNDLE_CREATED_DATE "%a %b %d %H:%M:%S GMT %Y" UTC)
 
+# Use Ninja as a generator for LLVM, compiler-rt, and Clang.
+set(XCODE_TOOLCHAIN_CMAKE_GENERATOR Ninja)
+
 # Each `<SOURCE_DIR>`, `<SOURCE_SUBDIR>`, `<BINARY_DIR>`, `<INSTALL_DIR>`, and `<TMP_DIR>`
 # used for `ExternalProject_Add` is repalced with their corresponding property values.
 # See at the bottom of `ExternalProject_Add_Step` section at <https://cmake.org/cmake/help/v3.10/module/ExternalProject.html>.
@@ -44,6 +47,7 @@ ExternalProject_Add(apple_clang
     GIT_TAG ${XCODE_TOOLCHAIN_APPLE_SWIFT_GIT_TAG}
     GIT_SHALLOW TRUE
     GIT_PROGRESS TRUE
+    CMAKE_GENERATOR ${XCODE_TOOLCHAIN_CMAKE_GENERATOR}
     # Do not configure, build, and install.
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
@@ -56,6 +60,7 @@ ExternalProject_Add(apple_compiler_rt
     GIT_TAG ${XCODE_TOOLCHAIN_APPLE_SWIFT_GIT_TAG}
     GIT_SHALLOW TRUE
     GIT_PROGRESS TRUE
+    CMAKE_GENERATOR ${XCODE_TOOLCHAIN_CMAKE_GENERATOR}
     # Do not configure, build, and install.
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
@@ -70,6 +75,7 @@ ExternalProject_Add(apple_llvm
     GIT_TAG ${XCODE_TOOLCHAIN_APPLE_SWIFT_GIT_TAG}
     GIT_SHALLOW TRUE
     GIT_PROGRESS TRUE
+    CMAKE_GENERATOR ${XCODE_TOOLCHAIN_CMAKE_GENERATOR}
     # TODO: See the other args like `-DCMAKE_C_FLAGS`, `-DCMAKE_CXX_FLAGS`.
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=${XCODE_TOOLCHAIN_BUNDLE_PATH}/usr)
 
