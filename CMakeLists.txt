@@ -68,4 +68,4 @@ endfunction()
 # Disable `llvm_check_source_file_list` which requires all source files
 # should be in a target of the `CMakeLists.txt` next to these files.
 function(llvm_check_source_file_list)
-endfunction(llvm_check_source_file_list)
+endfunction()
