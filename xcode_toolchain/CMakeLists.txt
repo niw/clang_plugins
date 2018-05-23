@@ -68,7 +68,6 @@ ExternalProject_Add(apple_compiler_rt
 
 # This `<INSTALL_DIR>` is replaced to the corresponding property value.
 set(XCODE_TOOLCHAIN_BUNDLE_PATH <INSTALL_DIR>/${XCODE_TOOLCHAIN_BUNDLE_NAME})
-set(XCODE_TOOLCHAIN_BUNDLE_INFO_PLIST_PATH ${XCODE_TOOLCHAIN_BUNDLE_PATH}/Info.plist)
 
 ExternalProject_Add(apple_llvm
     GIT_REPOSITORY "https://github.com/apple/swift-llvm.git"
@@ -103,6 +102,7 @@ ExternalProject_Add_StepDependencies(apple_llvm add_compiler_rt_to_llvm apple_co
 
 # A custom step to create `Info.plist` after installing LLVM to `CMAKE_INSTALL_PREFIX`.
 set(PLIST_BUDDY_COMMAND /usr/libexec/PlistBuddy)
+set(XCODE_TOOLCHAIN_BUNDLE_INFO_PLIST_PATH ${XCODE_TOOLCHAIN_BUNDLE_PATH}/Info.plist)
 ExternalProject_Add_Step(apple_llvm create_bundle_info_plist
     # We need to remove existing file, otherwise `PlistBuddy` complains that the same key already exists.
     COMMAND ${CMAKE_COMMAND} -E remove ${XCODE_TOOLCHAIN_BUNDLE_INFO_PLIST_PATH}
