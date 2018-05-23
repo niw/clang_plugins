@@ -100,6 +100,25 @@ ExternalProject_Add_Step(apple_llvm add_compiler_rt_to_llvm
     DEPENDERS configure)
 ExternalProject_Add_StepDependencies(apple_llvm add_compiler_rt_to_llvm apple_compiler_rt)
 
+# A custom step to create a symbolic link to the default Xcode toolchain C++ headers.
+# These C++ headers are not part of Apple swift open source.
+# TODO: Assumed that every environment has default Xcode toolchain at same path.
+# This is not true if it's ditributed by the archive. Probably need to include libc++ instead.
+set(XCRUN_COMMAND /usr/bin/xcrun)
+execute_process(
+    COMMAND ${XCRUN_COMMAND} --toolchain com.apple.dt.toolchain.XcodeDefault --find clang
+    OUTPUT_VARIABLE CLANG_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET)
+get_filename_component(CLANG_DIR_PATH ${CLANG_PATH} DIRECTORY)
+get_filename_component(XCODE_DEFAULT_TOOLCHAIN_PATH ${CLANG_DIR_PATH} DIRECTORY)
+set(XCODE_DEFAULT_TOOLCHAIN_CPP_HEADERS_PATH ${XCODE_DEFAULT_TOOLCHAIN_PATH}/include/c++)
+set(XCODE_TOOLCHAIN_BUNDLE_CPP_HEADERS_PATH ${XCODE_TOOLCHAIN_BUNDLE_PATH}/usr/include/c++)
+ExternalProject_Add_Step(apple_llvm symlink_default_xcode_toolchain_cpp_headers
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${XCODE_DEFAULT_TOOLCHAIN_CPP_HEADERS_PATH} ${XCODE_TOOLCHAIN_BUNDLE_CPP_HEADERS_PATH}
+    BYPRODUCTS ${XCODE_TOOLCHAIN_BUNDLE_CPP_HEADERS_PATH}
+    DEPENDERS install)
+
 # A custom step to create `Info.plist` after installing LLVM to `CMAKE_INSTALL_PREFIX`.
 set(PLIST_BUDDY_COMMAND /usr/libexec/PlistBuddy)
 set(XCODE_TOOLCHAIN_BUNDLE_INFO_PLIST_PATH ${XCODE_TOOLCHAIN_BUNDLE_PATH}/Info.plist)
@@ -119,14 +138,14 @@ ExternalProject_Add_Step(apple_llvm create_bundle_info_plist
     COMMAND ${PLIST_BUDDY_COMMAND} -c "Add Aliases array" ${XCODE_TOOLCHAIN_BUNDLE_INFO_PLIST_PATH}
     COMMAND ${PLIST_BUDDY_COMMAND} -c "Add Aliases:0 string '${XCODE_TOOLCHAIN_NAME}'" ${XCODE_TOOLCHAIN_BUNDLE_INFO_PLIST_PATH}
     BYPRODUCTS ${XCODE_TOOLCHAIN_BUNDLE_INFO_PLIST_PATH}
-    DEPENDEES install)
+    DEPENDERS install)
 
 # A custom step to create a symbolic link of Xcode toolchain to `~/Library/Developer/Toolchains`
 set(XCODE_TOOLCHAIN_BUNDLE_INSTALL_PATH ${XCODE_TOOLCHAIN_BUNDLE_INSTALL_PREFIX}/${XCODE_TOOLCHAIN_BUNDLE_NAME})
 ExternalProject_Add_Step(apple_llvm symlink_xcode_toolchain
     COMMAND ${CMAKE_COMMAND} -E create_symlink ${XCODE_TOOLCHAIN_BUNDLE_PATH} ${XCODE_TOOLCHAIN_BUNDLE_INSTALL_PATH}
     BYPRODUCTS ${XCODE_TOOLCHAIN_BUNDLE_INSTALL_PATH}
-    DEPENDEES create_bundle_info_plist
+    DEPENDEES install
     # This is an optional step and exclude from default targets.
     EXCLUDE_FROM_MAIN TRUE)
 ExternalProject_Add_StepTargets(apple_llvm symlink_xcode_toolchain)
@@ -137,7 +156,7 @@ set(XCODE_TOOLCHAIN_BUNDLE_DISTRIBUTION_ARCHIVE_PATH ${XCODE_TOOLCHAIN_BUNDLE_PA
 ExternalProject_Add_Step(apple_llvm create_xcode_toolchain_distribution_archive
     COMMAND ${DITTO_COMMAND} -c -k --keepParent ${XCODE_TOOLCHAIN_BUNDLE_PATH} ${XCODE_TOOLCHAIN_BUNDLE_DISTRIBUTION_ARCHIVE_PATH}
     BYPRODUCTS ${XCODE_TOOLCHAIN_BUNDLE_DISTRIBUTION_ARCHIVE_PATH}
-    DEPENDEES create_bundle_info_plist
+    DEPENDEES install
     # This is an optional step and exclude from default targets.
     EXCLUDE_FROM_MAIN TRUE)
 ExternalProject_Add_StepTargets(apple_llvm create_xcode_toolchain_distribution_archive)
