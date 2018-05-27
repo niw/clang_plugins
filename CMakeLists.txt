@@ -9,6 +9,9 @@ set(CMAKE_MODULE_PATH
 
 include(XcodeToolchain)
 
+# Use C++11.
+set(CMAKE_CXX_STANDARD 11)
+
 # Use `TOOLCHAINS` as a default value for this as like how `xcrun` works.
 set(CLANG_PLUGINS_XCODE_TOOLCHAIN "$ENV{TOOLCHAINS}"
   CACHE STRING "Xcode toolchain name to find LLVM and Clang.")
@@ -31,3 +34,4 @@ endif()
 
 include(UseClang)
 
+add_subdirectory(examples)

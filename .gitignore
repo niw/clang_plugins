@@ -2,3 +2,5 @@
 /.idea
 /cmake-build-*
 build
+project.xcworkspace/
+xcuserdata/
