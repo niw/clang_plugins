@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 
 project(xcode_toolchain)
 
+set(CMAKE_MODULE_PATH
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+    ${CMAKE_MODULE_PATH})
+
 include(ExternalProject)
+include(XcodeToolchain)
 
 set(XCODE_TOOLCHAIN_APPLE_SWIFT_GIT_TAG "origin/stable"
     CACHE STRING "Branch name to be checked out for each Swift repositories to build Xcode toolchain.")
@@ -104,14 +109,7 @@ ExternalProject_Add_StepDependencies(apple_llvm add_compiler_rt_to_llvm apple_co
 # These C++ headers are not part of Apple swift open source.
 # TODO: Assumed that every environment has default Xcode toolchain at same path.
 # This is not true if it's ditributed by the archive. Probably need to include libc++ instead.
-set(XCRUN_COMMAND /usr/bin/xcrun)
-execute_process(
-    COMMAND ${XCRUN_COMMAND} --toolchain com.apple.dt.toolchain.XcodeDefault --find clang
-    OUTPUT_VARIABLE CLANG_PATH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    ERROR_QUIET)
-get_filename_component(CLANG_DIR_PATH ${CLANG_PATH} DIRECTORY)
-get_filename_component(XCODE_DEFAULT_TOOLCHAIN_PATH ${CLANG_DIR_PATH} DIRECTORY)
+find_xcode_toolchain_path(XCODE_DEFAULT_TOOLCHAIN_PATH)
 set(XCODE_DEFAULT_TOOLCHAIN_CPP_HEADERS_PATH ${XCODE_DEFAULT_TOOLCHAIN_PATH}/include/c++)
 set(XCODE_TOOLCHAIN_BUNDLE_CPP_HEADERS_PATH ${XCODE_TOOLCHAIN_BUNDLE_PATH}/usr/include/c++)
 ExternalProject_Add_Step(apple_llvm symlink_default_xcode_toolchain_cpp_headers
