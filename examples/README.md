@@ -46,6 +46,8 @@ Implemented in `example_checker.cpp`. You can use this plugin in Xcode.
 
 See <https://clang-analyzer.llvm.org/checker_dev_manual.html>.
 
+### Usage
+
 Build the project by using CMake, then open `Example.xcodeproj` in Xcode.
 
 Select default scheme and analyze it.
