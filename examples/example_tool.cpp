@@ -26,11 +26,11 @@ using namespace clang::tooling;
 class ExampleRewriteVisitor
     : public RecursiveASTVisitor<ExampleRewriteVisitor> {
 public:
-  explicit ExampleRewriteVisitor(Rewriter &rewriter) : rewriter_(rewriter) {}
+  explicit ExampleRewriteVisitor(Rewriter &rewriter) : rewriter_{rewriter} {}
 
   bool VisitObjCMethodDecl(ObjCMethodDecl *d) {
     std::string name{d->getNameAsString()};
-    if (isAppleName(name)) {
+    if (IsAppleName(name)) {
       llvm::errs() << "* Rewrite: " << name << "\n";
       // Insert `_private` in front of its selector name.
       rewriter_.InsertTextBefore(d->getSelectorStartLoc(), "_private");
@@ -39,7 +39,7 @@ public:
   }
 
 private:
-  bool isAppleName(std::string &name) const {
+  bool IsAppleName(std::string &name) const {
     return name[0] == '_' && count(name.begin(), name.end(), '_') < 2;
   }
 
@@ -48,7 +48,7 @@ private:
 
 class ExampleRewriteConsumer : public ASTConsumer {
 public:
-  explicit ExampleRewriteConsumer(Rewriter &rewriter) : rewriter_(rewriter) {}
+  explicit ExampleRewriteConsumer(Rewriter &rewriter) : rewriter_{rewriter} {}
 
   virtual void HandleTranslationUnit(ASTContext &c) {
     ExampleRewriteVisitor v{rewriter_};
@@ -69,7 +69,7 @@ public:
   }
 
   void EndSourceFileAction() override {
-    SourceManager &sm = rewriter_.getSourceMgr();
+    SourceManager &sm{rewriter_.getSourceMgr()};
     llvm::errs() << "* EndSourceFileAction: "
                  << sm.getFileEntryForID(sm.getMainFileID())->getName() << "\n";
     rewriter_.getEditBuffer(sm.getMainFileID()).write(llvm::outs());

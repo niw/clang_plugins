@@ -21,9 +21,9 @@ public:
   void checkASTDecl(const ObjCMethodDecl *d, AnalysisManager &mgr,
                     BugReporter &br) const {
     std::string name{d->getNameAsString()};
-    if (isAppleName(name)) {
-      PathDiagnosticLocation l =
-          PathDiagnosticLocation::create(d, br.getSourceManager());
+    if (IsAppleName(name)) {
+      PathDiagnosticLocation l{
+          PathDiagnosticLocation::create(d, br.getSourceManager())};
       br.EmitBasicReport(
           d, this,
           "A method name may conflict with Apple's internal method names.",
@@ -32,7 +32,7 @@ public:
   }
 
 private:
-  bool isAppleName(std::string &name) const {
+  bool IsAppleName(std::string &name) const {
     return name[0] == '_' && count(name.begin(), name.end(), '_') < 2;
   }
 };

@@ -20,14 +20,14 @@ class ExampleVisitor : public RecursiveASTVisitor<ExampleVisitor> {
 public:
   bool VisitObjCMethodDecl(ObjCMethodDecl *d) {
     std::string name{d->getNameAsString()};
-    if (isAppleName(name)) {
+    if (IsAppleName(name)) {
       llvm::errs() << name << "\n";
     }
     return true;
   }
 
 private:
-  bool isAppleName(std::string &name) const {
+  bool IsAppleName(std::string &name) const {
     return name[0] == '_' && count(name.begin(), name.end(), '_') < 2;
   }
 };
@@ -35,15 +35,13 @@ private:
 class ExampleConsumer : public ASTConsumer {
 public:
   virtual void HandleTranslationUnit(clang::ASTContext &c) {
-    ExampleVisitor v;
+    ExampleVisitor v{};
     v.TraverseDecl(c.getTranslationUnitDecl());
   }
 };
 
 class ExamplePluginAction : public PluginASTAction {
 public:
-  explicit ExamplePluginAction() {}
-
   std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &ci,
                                                  llvm::StringRef) {
     return llvm::make_unique<ExampleConsumer>();
