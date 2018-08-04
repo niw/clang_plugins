@@ -3,6 +3,15 @@ Examples
 
 This directory contains each standalone tool, plugin works while compiling, and analyzer checker.
 
+## CMake variables
+
+* `CLANG_PLUGINS_EXAMPLES_XCODE_TOOLCHAIN`
+
+    Name of Xcode toolchain that is used by the example Xcode project.
+    This is not for building these example Clang tool, plugin, or analyzer checker
+    but for using these plugin or analyzer checker.
+    Default to using the Xcode default toolchain.
+
 Standalone Clang tool
 ---------------------
 

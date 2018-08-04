@@ -12,9 +12,13 @@ include(XcodeToolchain)
 # Use C++11.
 set(CMAKE_CXX_STANDARD 11)
 
-# Use `TOOLCHAINS` as a default value for this as like how `xcrun` works.
+
+# Name of Xcode toolchain that is used for building these example Clang tool,
+# plugin, or analyzer checker.
+# Default to `TOOLCHAINS` as a default value for this as like how `xcrun` works.
 set(CLANG_PLUGINS_XCODE_TOOLCHAIN "$ENV{TOOLCHAINS}"
   CACHE STRING "Xcode toolchain name to find LLVM and Clang.")
+
 
 if(CLANG_PLUGINS_XCODE_TOOLCHAIN)
     # Use `xcrun --toolchain` to find the given Xcode toolchain.
