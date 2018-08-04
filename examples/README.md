@@ -1,9 +1,15 @@
 Examples
 ========
 
-This directory contains each standalone tool, plugin works while compiling, and analyzer checker.
+This directory contains each standalone tool, plugin works while Xcode is compiling source codes,
+and analyzer checker works alongside Xcode user interface.
 
 ## CMake variables
+
+Each plugin or analyzer checker works with Apple’s Xcode without custom toolchain and configured
+to be used with system’s default Xcode toolchain.
+However, if you want to use these with a specific version of Xcode, for example, the beta version of Xcode,
+set these variables.
 
 * `CLANG_PLUGINS_EXAMPLES_XCODE_TOOLCHAIN`
 

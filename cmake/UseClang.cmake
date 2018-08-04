@@ -40,6 +40,19 @@ function(add_clang_format_custom_target target)
     add_dependencies(${target} ${target}_clang_format)
 endfunction()
 
+# Add symbol to the list of global symbols names for the target
+# that will remain as global symbols in the output file.
+function(append_target_exported_symbols target)
+    # Instead of using `LLVM_EXPORTED_SYMBOL_FILE`, it's only for Darwin though,
+    # Use `-exported_symbol` instead, to make things easier.
+    # See `ld(1)`.
+    # See also `add_llvm_symbol_exports` and `LLVM_EXPORTED_SYMBOL_FILE` in `AddLLVM.cmake`.
+    list(TRANSFORM ARGN PREPEND " -Wl,-exported_symbol," OUTPUT_VARIABLE link_flags)
+    list(JOIN link_flags "" link_flags_string)
+    set_property(TARGET ${target}
+        APPEND_STRING PROPERTY LINK_FLAGS ${link_flags_string})
+endfunction()
+
 # Create a Clang tool target
 function(add_clang_tool name)
     add_llvm_executable(${name} ${ARGN})
@@ -53,5 +66,30 @@ function(add_clang_plugin name)
     add_llvm_loadable_module(${name}
         PLUGIN_TOOL clang
         ${ARGN})
+    # TODO: Ensure which library is really needed.
+    # Minimum required Clang libraries, which are not included in Xcode default toolchain.
+    target_link_libraries(${name}
+        PRIVATE
+        clangFrontend)
+    # See `clang/Frontend/FrontendPluginRegistry.h`, `llvm/Support/Registry.h`.
+    append_target_exported_symbols(${name}
+        "__ZN4llvm8Registry*")
+    add_clang_format_custom_target(${name})
+endfunction()
+
+# Create a Clang analyzer checker target
+function(clang_analyzer_checker name)
+    add_llvm_loadable_module(${name}
+        PLUGIN_TOOL clang
+        ${ARGN})
+    # TODO: Ensure which library is really needed.
+    # Minimum required Clang libraries, which are not included in Xcode default toolchain.
+    target_link_libraries(${name}
+        PRIVATE
+        clangStaticAnalyzerCore)
+    # See `clang/StaticAnalyzer/Core/CheckerRegistry.h`.
+    append_target_exported_symbols(${name}
+        "_clang_registerCheckers"
+        "_clang_analyzerAPIVersionString")
     add_clang_format_custom_target(${name})
 endfunction()
