@@ -13,6 +13,8 @@
 #include "clang/StaticAnalyzer/Core/CheckerRegistry.h"
 #include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
 
+#include "configure.h"
+
 using namespace clang;
 using namespace ento;
 
@@ -43,4 +45,4 @@ extern "C" void clang_registerCheckers(CheckerRegistry &registry) {
 }
 
 extern "C" const char clang_analyzerAPIVersionString[] =
-    CLANG_ANALYZER_API_VERSION_STRING;
+    CLANG_PLUGINS_EXAMPLES_CLANG_VERSION;

@@ -1,0 +1,8 @@
+#ifndef CLANG_PLUGINS_EXAMPLES_CONFIGURE_H_
+#define CLANG_PLUGINS_EXAMPLES_CONFIGURE_H_
+
+// Clang version that example Xcode project uses
+// Use this for `clang_analyzerAPIVersionString`, or use `CLANG_ANALYZER_API_VERSION_STRING`.
+#cmakedefine CLANG_PLUGINS_EXAMPLES_CLANG_VERSION ("@CLANG_PLUGINS_EXAMPLES_CLANG_VERSION@")
+
+#endif // CLANG_PLUGINS_EXAMPLES_CONFIGURE_H_

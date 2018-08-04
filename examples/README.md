@@ -12,6 +12,15 @@ This directory contains each standalone tool, plugin works while compiling, and 
     but for using these plugin or analyzer checker.
     Default to using the Xcode default toolchain.
 
+* `CLANG_PLUGINS_EXAMPLES_CLANG_VERSION`
+
+    Clang version that is used by the example Xcode project.
+    This is used for Clang analyzer checker.
+    In case using example Clang analyzer checker in the different Xcode from the system’s default one,
+    like the beta version of it, set appropriate version.
+    For example, `"10.0.0"` for Xcode 10.0.
+    Default to the Clang version that given Xcode toolchain is using.
+
 Standalone Clang tool
 ---------------------
 
