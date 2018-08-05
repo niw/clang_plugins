@@ -1,5 +1,6 @@
 .DS_Store
 /.idea
+/.vscode
 /cmake-build-*
 build
 project.xcworkspace/

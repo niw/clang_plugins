@@ -52,9 +52,28 @@ Then, build the project, including examples.
 It creates all example plugins. Open `examples/Example.xcodeproj` in Xcode and build the example project
 or analyze it to see how each plugin or analyzer checker works.
 
+### Use IDE
+
+This project also can be imported and build in various IDE that supports CMake.
+Stil, you first need to build the Xcode toolchain as described above.
+
 You can use [CLion](https://www.jetbrains.com/clion/) to import this project.
 Set `-DCLANG_PLUGINS_XCODE_TOOLCHAIN=Custom` at CMake options in CMake pane of Build, Execution,
 Deployment section in the project preferences.
+
+You can also use [Visual Studio Code](https://code.visualstudio.com/) with
+[CMake Tools](https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools) extension.
+
+Set next workspace settings in `.vscode/settings.json` with next configuration.
+
+    {
+        "cmake.configureSettings": {
+            "CLANG_PLUGINS_XCODE_TOOLCHAIN": "Custom"
+        }
+    }
+
+CMake Tools may [configure Intelli Sence](https://blogs.msdn.microsoft.com/vcblog/2018/07/25/visual-studio-code-cc-extension-july-2018-update-and-intellisense-auto-configuration-for-cmake/)
+once it completes CMake configuration.
 
 ### CMake variables
 
