@@ -23,7 +23,12 @@ See `examples/README.md` for the details.
 Usage
 -----
 
-First, build your own custom Xcode toolchain. This step takes longer time.
+There are two steps to use this project.
+
+### Create a custom Xcode toolchain
+
+First, build your own custom Xcode toolchain that includes the LLVM and Clang libraries we need.
+This step takes long time.
 
     $ brew install cmake ninja
     $ cd xcode_toolchain
@@ -31,6 +36,10 @@ First, build your own custom Xcode toolchain. This step takes longer time.
     $ cd build
     $ cmake -G Ninja ../
     $ cmake --build . --target apple_llvm-symlink_xcode_toolchain
+
+See `xcode_toolchains/README.md` for the details.
+
+### Build the project with examples.
 
 Then, build the project, including examples.
 
@@ -40,8 +49,8 @@ Then, build the project, including examples.
     $ cmake -DCLANG_PLUGINS_XCODE_TOOLCHAIN=Custom ../
     $ cmake --build .
 
-It creates all example plugins. Open `examples/Example.xcodeproj` in Xcode and build example project
-or analyze it to see how each plugin or analyzer cheker works.
+It creates all example plugins. Open `examples/Example.xcodeproj` in Xcode and build the example project
+or analyze it to see how each plugin or analyzer checker works.
 
 You can use [CLion](https://www.jetbrains.com/clion/) to import this project.
 Set `-DCLANG_PLUGINS_XCODE_TOOLCHAIN=Custom` at CMake options in CMake pane of Build, Execution,

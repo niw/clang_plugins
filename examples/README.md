@@ -54,7 +54,7 @@ See also <https://clang.llvm.org/docs/ClangPlugins.html>.
 
 Build the project by using CMake, then open `Example.xcodeproj` in Xcode.
 
-Select default scheme and build for running.
+Select the default scheme and build for running.
 In the build messages, it may print something extra line for `example.m`.
 
 Clang analyzer checker
@@ -68,5 +68,5 @@ See <https://clang-analyzer.llvm.org/checker_dev_manual.html>.
 
 Build the project by using CMake, then open `Example.xcodeproj` in Xcode.
 
-Select default scheme and analyze it.
+Select the default scheme and analyze it.
 You may see a custom analyzer error on `example.m`.
