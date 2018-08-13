@@ -71,6 +71,9 @@ function(add_clang_plugin name)
     target_link_libraries(${name}
         PRIVATE
         clangFrontend)
+    # No dynamic link libraries, remove unnecessary rpath.
+    set_target_properties(${name} PROPERTIES
+        BUILD_WITH_INSTALL_RPATH FALSE)
     # See `clang/Frontend/FrontendPluginRegistry.h`, `llvm/Support/Registry.h`.
     append_target_exported_symbols(${name}
         "__ZN4llvm8Registry*")
@@ -87,6 +90,9 @@ function(clang_analyzer_checker name)
     target_link_libraries(${name}
         PRIVATE
         clangStaticAnalyzerCore)
+    # No dynamic link libraries, remove unnecessary rpath.
+    set_target_properties(${name} PROPERTIES
+        BUILD_WITH_INSTALL_RPATH FALSE)
     # See `clang/StaticAnalyzer/Core/CheckerRegistry.h`.
     append_target_exported_symbols(${name}
         "_clang_registerCheckers"
