@@ -85,3 +85,12 @@ once it completes CMake configuration.
 
 There are a few extra CMake variables for examples.
 See `examples/README.md` for the details.
+
+Clang compatibility
+-------------------
+
+Bob Wilson at Apple answered for a question about which LLVM Clang source is used for Xcode LLVM Clang at on
+[this thread on swift-dev mailing list](https://lists.swift.org/pipermail/swift-dev/Week-of-Mon-20170807/005084.html).
+
+If this reply is still valid, as long as we use LLVM Clang source that is tagged with the same version of
+Swift shipped with Xcode, it might have somewhat a compatibility with it.
