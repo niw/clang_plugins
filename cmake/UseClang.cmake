@@ -47,8 +47,10 @@ function(append_target_exported_symbols target)
     # Use `-exported_symbol` instead, to make things easier.
     # See `ld(1)`.
     # See also `add_llvm_symbol_exports` and `LLVM_EXPORTED_SYMBOL_FILE` in `AddLLVM.cmake`.
-    list(TRANSFORM ARGN PREPEND " -Wl,-exported_symbol," OUTPUT_VARIABLE link_flags)
-    list(JOIN link_flags "" link_flags_string)
+    set(link_flags_string "")
+    foreach(symbol IN LISTS ARGN)
+        string(APPEND link_flags_string " -Wl,-exported_symbol," ${symbol})
+    endforeach()
     set_property(TARGET ${target}
         APPEND_STRING PROPERTY LINK_FLAGS ${link_flags_string})
 endfunction()
