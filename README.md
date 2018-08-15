@@ -4,7 +4,7 @@ Clang plugins
 This is a repository for Clang plugins examples and development, that works alongside Xcode.
 
 You can implement your own Clang plugins to extend your day-to-day Xcode workflow,
-like custom analyzer checker to warn cording rules or source-to-source converter for refactoring.
+like custom analyzer checker to warn coding rules or source-to-source converter for refactoring.
 
 Contents
 --------
