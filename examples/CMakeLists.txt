@@ -27,7 +27,7 @@ add_clang_plugin(example_plugin
     example_plugin.cpp)
 
 # Example Clang analyzer cheker
-clang_analyzer_checker(example_checker
+add_clang_analyzer_checker(example_checker
     example_checker.cpp)
 
 

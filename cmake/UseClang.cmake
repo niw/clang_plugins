@@ -83,7 +83,7 @@ function(add_clang_plugin name)
 endfunction()
 
 # Create a Clang analyzer checker target
-function(clang_analyzer_checker name)
+function(add_clang_analyzer_checker name)
     add_llvm_loadable_module(${name}
         PLUGIN_TOOL clang
         ${ARGN})
